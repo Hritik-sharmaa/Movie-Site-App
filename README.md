@@ -1,8 +1,15 @@
-# React + Vite
+# Movie-Site-App
+Search and Discover the new movies 🎬
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# About this project🎯
+- In these app you can search the movies and it will show you the results.
+- You can also add movies to your favourites and can also remove them.
+- And favourites movies are store on localStorage so when website render the favourites is still there.
 
-Currently, two official plugins are available:
+# Technologies 🛠
+- `React.js`
+- `Tailwind CSS`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Demo video 🎥
+https://github.com/Hritik-sharmaa/Movie-Site-App/assets/130376335/39ac9462-ad7e-4960-a6f6-fa09c443e6e6
+
