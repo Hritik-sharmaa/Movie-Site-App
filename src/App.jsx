@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navigation from "./Components/Navigation";
 import MoviesList from "./Components/MoviesList";
 import Heading from "./Components/Heading";
-
 function App() {
   const [movies, setMovies] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [favourites, setFavourites] = useState([]);
 
   useEffect(() => {
     if (searchValue) {
@@ -15,6 +15,12 @@ function App() {
     }
   }, [searchValue]);
 
+  useEffect(() => {
+    const movieFavourites =
+      JSON.parse(localStorage.getItem("favourites-movie")) || [];
+    setFavourites(movieFavourites);
+  }, []);
+
   const getMovieRequest = async (searchValue) => {
     const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=2057d433`;
     const response = await fetch(url);
@@ -22,7 +28,6 @@ function App() {
     if (responseJson.Search) {
       setMovies(responseJson.Search);
     }
-    //console.log(responseJson);
   };
 
   const getRandomMovies = async () => {
@@ -37,7 +42,7 @@ function App() {
 
   const randomSearchQuery = () => {
     const keywords = [
-      "actions",
+      "action",
       "comedy",
       "drama",
       "horror",
@@ -45,11 +50,34 @@ function App() {
       "adventure",
       "cartoon",
       "anime",
+      "romance",
+      "crime",
+      "science-fiction",
+      "animation",
+      "documentary",
     ];
     const randomIndex = Math.floor(Math.random() * keywords.length);
-
     return keywords[randomIndex];
   };
+
+  const handleFavouritesClick = (movie) => {
+    const favouriteMovies = [...favourites, movie];
+    setFavourites(favouriteMovies);
+    saveToLocalStorage(favouriteMovies);
+  };
+
+  const handleRemoveClick = (movie) => {
+    const newFavouritesList = favourites.filter(
+      (favourite) => favourite.imdbID !== movie.imdbID
+    );
+    setFavourites(newFavouritesList);
+    saveToLocalStorage(newFavouritesList);
+  };
+
+  const saveToLocalStorage = (items) => {
+    localStorage.setItem("favourites-movie", JSON.stringify(items));
+  };
+
   return (
     <>
       <section>
@@ -59,7 +87,19 @@ function App() {
         <div className="mt-10">
           <Heading label="Movies" textSize="text-4xl" />
         </div>
-        <MoviesList movieslist={movies} />
+        <MoviesList
+          movieslist={movies}
+          favouritesClick={handleFavouritesClick}
+          btnIcon="&#10084;"
+        />
+        <div className="mt-10 mb-20">
+          <Heading label="Favourites" textSize="text-4xl" />
+          <MoviesList
+            movieslist={favourites}
+            favouritesClick={handleRemoveClick}
+            btnIcon="X"
+          />
+        </div>
       </section>
     </>
   );
