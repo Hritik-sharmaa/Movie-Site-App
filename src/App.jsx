@@ -2,16 +2,19 @@ import React, { useEffect, useState } from "react";
 import Navigation from "./Components/Navigation";
 import MoviesList from "./Components/MoviesList";
 import Heading from "./Components/Heading";
+
 function App() {
   const [movies, setMovies] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [favourites, setFavourites] = useState([]);
+  const [recentMovies, setRecentMovies] = useState([]);
 
   useEffect(() => {
     if (searchValue) {
       getMovieRequest(searchValue);
     } else {
       getRandomMovies();
+      getRecentMovies();
     }
   }, [searchValue]);
 
@@ -37,6 +40,15 @@ function App() {
     const responseJson = await response.json();
     if (responseJson.Search) {
       setMovies(responseJson.Search);
+    }
+  };
+
+  const getRecentMovies = async () => {
+    const url = `http://www.omdbapi.com/?s=movie&y=2024&apikey=2057d433`;
+    const response = await fetch(url);
+    const responseJson = await response.json();
+    if (responseJson.Search) {
+      setRecentMovies(responseJson.Search);
     }
   };
 
@@ -92,7 +104,15 @@ function App() {
           favouritesClick={handleFavouritesClick}
           btnIcon="&#10084;"
         />
-        <div className="mt-10 mb-20">
+        <div className="mt-10">
+          <Heading label="Recently Released Movies" textSize="text-4xl" />
+          <MoviesList
+            movieslist={recentMovies}
+            favouritesClick={handleFavouritesClick}
+            btnIcon="&#10084;"
+          />
+        </div>
+        <div className="mt-10">
           <Heading label="Favourites" textSize="text-4xl" />
           <MoviesList
             movieslist={favourites}
